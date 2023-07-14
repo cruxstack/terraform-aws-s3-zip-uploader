@@ -14,8 +14,8 @@ The development container is based on Ubuntu 20.04 (Focal) and includes the
 following tools:
 
 - AWS CLI
-- Python 3.8
-- Python Package: `boto3`, `black`
+- Python v3.8
+- Python Packages: `boto3`, `black`
 - Docker CLI
 - Terraform
 

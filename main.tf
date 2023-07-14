@@ -7,7 +7,7 @@ locals {
   artifact_src_bucket_path = trim(var.artifact_src_bucket_path, "/")
   artifact_dst_bucket_arn  = var.artifact_dst_bucket_arn
   artifact_dst_bucket_name = data.aws_arn.artifact_dst_bucket.resource
-  artifact_dst_bucket_path = trim(var.artifact_dst_bucket_path, "/")
+  artifact_dst_bucket_path = trimprefix(var.artifact_dst_bucket_path, "/")
 }
 
 data "aws_arn" "artifact_src_bucket" {

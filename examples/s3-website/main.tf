@@ -1,17 +1,4 @@
-locals {
-  mime_types = {
-    ".html" = "text/html"
-    ".css"  = "text/css"
-    ".js"   = "application/javascript"
-    ".json" = "application/json"
-    ".png"  = "image/png"
-    ".jpg"  = "image/jpeg"
-    ".gif"  = "image/gif"
-    ".svg"  = "image/svg+xml"
-  }
-}
-
-module "artifact_builder" {
+module "artifact_packager" {
   source  = "sgtoj/artifact-packager/docker"
   version = "1.2.1"
 
@@ -40,6 +27,6 @@ resource "aws_s3_bucket" "website_bucket" {
 module "s3_zip_uploader" {
   source = "../../"
 
-  artifact_src_local_path = module.artifact_builder.artifact_dst_path
+  artifact_src_local_path = module.artifact_packager.artifact_dst_path
   artifact_dst_bucket_arn = aws_s3_bucket.website_bucket.arn
 }

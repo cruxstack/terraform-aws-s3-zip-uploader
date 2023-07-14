@@ -19,9 +19,6 @@ be determined in advance.
 
 ## Usage
 
-Provide values for the required variables, and use the module in your Terraform
-configuration like this:
-
 ```hcl
 module "s3_zip_uploader" {
   source  = "sgtoj/s3-zip-uploader/aws"
