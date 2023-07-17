@@ -28,6 +28,7 @@ resource "aws_s3_bucket_object" "artifact" {
   source = local.artifact_src_local_path
 }
 
+# tflint-ignore: terraform_unused_declarations
 data "aws_lambda_invocation" "artifact" {
   count = module.this.enabled ? 1 : 0
 
