@@ -29,8 +29,4 @@ RUN SYSTEM_ARCH=$(dpkg --print-architecture) \
 # Verify Installs
 RUN terraform --version \
     && aws --version \
-    && node --version \
-    && npm --version \
-    && opa version \
-    && tsc --version \
     && docker --version
