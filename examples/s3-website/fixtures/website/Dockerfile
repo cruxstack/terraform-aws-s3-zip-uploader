@@ -13,4 +13,6 @@ FROM alpine:latest as package
 COPY --from=build /opt/app/assets/ /opt/app/dist/
 
 RUN apk add zip \
-    && cd /opt/app/dist
+    && cd /opt/app/dist \
+    && zip -r /tmp/package.zip .
+
