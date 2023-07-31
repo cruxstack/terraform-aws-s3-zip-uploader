@@ -21,7 +21,7 @@ be determined in advance.
 
 ```hcl
 module "s3_zip_uploader" {
-  source  = "sgtoj/s3-zip-uploader/aws"
+  source  = "cruxstack/s3-zip-uploader/aws"
   version = "x.x.x"
 
   artifact_src_local_path = "/path/to/yourfile.zip"
@@ -29,12 +29,12 @@ module "s3_zip_uploader" {
 }
 ```
 
-## Requirements
-
-- Terraform 0.13 or newer
-- AWS provider 4.0 or newer
-
 ## Inputs
+
+This module uses the `cloudposse/label/null` module for naming and tagging
+resources. As such, it also includes a `context.tf` file with additional
+optional variables you can set. Refer to the [`cloudposse/label` documentation](https://registry.terraform.io/modules/cloudposse/label/null/latest)
+for more details on these variables.
 
 | Name                       | Description                                                                                                                                                         | Type   | Default                     | Required |
 |----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------|-----------------------------|----------|
@@ -43,13 +43,6 @@ module "s3_zip_uploader" {
 | `artifact_src_local_path`  | The local path of the artifact zip file on the machine where Terraform is executed.                                                                                 | string | N/A                         | Yes      |
 | `artifact_dst_bucket_arn`  | The ARN of the destination S3 bucket where the contents of the zip file will be uploaded.                                                                           | string | N/A                         | Yes      |
 | `artifact_dst_bucket_path` | The path within the destination S3 bucket where the contents of the zip file will be uploaded.                                                                      | string | `"/"`                       | No       |
-
-### Note
-
-This module uses the `cloudposse/label/null` module for naming and tagging
-resources. As such, it also includes a `context.tf` file with additional
-optional variables you can set. Refer to the [`cloudposse/label` documentation](https://registry.terraform.io/modules/cloudposse/label/null/latest)
-for more details on these variables.
 
 ## Outputs
 
