@@ -4,8 +4,11 @@
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2.0.1": {},
   },
+  "mounts": [
+    "source=${localEnv:HOME}/.aws,target=/home/vscode/.aws,type=bind,consistency=cached"
+  ],
   "containerEnv": {
-    "TF_PLUGIN_CACHE_DIR": "/workspaces/terraform-aws-s3-zip-uploader/.devcontainer/tmp/.terraform.d/"
+    "TF_PLUGIN_CACHE_DIR": "${containerWorkspaceFolder}/.devcontainer/tmp/.terraform.d/"
   },
   "customizations": {
     "vscode": {
@@ -33,6 +36,7 @@
         "dbaeumer.vscode-eslint",
         "editorconfig.editorconfig",
         "github.copilot",
+        "github.copilot-chat",
         "github.vscode-github-actions",
         "hashicorp.terraform",
         "ms-azuretools.vscode-docker",
