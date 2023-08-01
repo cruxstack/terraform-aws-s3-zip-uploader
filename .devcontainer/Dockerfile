@@ -1,11 +1,12 @@
-FROM mcr.microsoft.com/vscode/devcontainers/base:1-focal
+FROM mcr.microsoft.com/vscode/devcontainers/base:jammy
 
 # install aws
-RUN apt-get update && \
-    apt-get install -y unzip python3-pip && \
-    pip3 install --no-cache-dir --upgrade awscli && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN SYSTEM_ARCH=$(uname -m) \
+    && curl "https://awscli.amazonaws.com/awscli-exe-linux-${SYSTEM_ARCH}.zip" -o "awscliv2.zip" \
+    && unzip awscliv2.zip \
+    && aws/install \
+    && aws --version \
+    && rm -rf aws
 
 # install terraform
 ENV TERRAFORM_VERSION=1.5.1
@@ -20,6 +21,11 @@ RUN SYSTEM_ARCH=$(dpkg --print-architecture) \
 
 # install docker
 COPY --from=docker:dind /usr/local/bin/docker /usr/local/bin/
+
+# install pip
+RUN apt-get update
+RUN apt-get install -y \
+    python3-pip
 
 # install python packages
 RUN python3 -m pip install \
