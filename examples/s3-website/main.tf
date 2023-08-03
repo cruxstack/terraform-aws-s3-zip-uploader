@@ -1,5 +1,5 @@
 module "artifact_packager" {
-  source  = "sgtoj/artifact-packager/docker"
+  source  = "cruxstack/artifact-packager/docker"
   version = "1.2.1"
 
   docker_build_context   = "${path.module}/fixtures/website"

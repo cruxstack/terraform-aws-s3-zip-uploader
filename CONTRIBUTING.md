@@ -33,7 +33,7 @@ following tools:
 1. Clone and open this repository:
 
     ```bash
-    git clone https://github.com/sgtoj/terraform-aws-s3-zip-uploader.git
+    git clone https://github.com/cruxstack/terraform-aws-s3-zip-uploader.git
     code terraform-aws-s3-zip-uploader
     ```
 
