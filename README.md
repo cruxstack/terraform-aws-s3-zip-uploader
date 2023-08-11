@@ -1,4 +1,4 @@
-# Terraform AWS S3 ZIP Uploader
+# Terraform Module: AWS S3 ZIP Uploader
 
 This Terraform module is a utility for uploading the contents of a ZIP file to
 an AWS S3 bucket. It's especially useful when you need to manage an unknown
@@ -36,13 +36,13 @@ resources. As such, it also includes a `context.tf` file with additional
 optional variables you can set. Refer to the [`cloudposse/label` documentation](https://registry.terraform.io/modules/cloudposse/label/null/latest)
 for more details on these variables.
 
-| Name                       | Description                                                                                                                                                         | Type   | Default                     | Required |
-|----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------|-----------------------------|----------|
-| `artifact_src_bucket_arn`  | The ARN of the S3 bucket where the source artifact zip file will be stored. If not provided, the source bucket is assumed to be the same as the destination bucket. | string | `""`                        | No       |
-| `artifact_src_bucket_path` | The path within the S3 bucket where the source artifact zip file will be located.                                                                                   | string | `"__upload__/artifact.zip"` | No       |
-| `artifact_src_local_path`  | The local path of the artifact zip file on the machine where Terraform is executed.                                                                                 | string | N/A                         | Yes      |
-| `artifact_dst_bucket_arn`  | The ARN of the destination S3 bucket where the contents of the zip file will be uploaded.                                                                           | string | N/A                         | Yes      |
-| `artifact_dst_bucket_path` | The path within the destination S3 bucket where the contents of the zip file will be uploaded.                                                                      | string | `"/"`                       | No       |
+| Name                       | Description                                                                                                     | Type   | Default                     | Required |
+|----------------------------|-----------------------------------------------------------------------------------------------------------------|--------|-----------------------------|----------|
+| `artifact_src_bucket_arn`  | ARN of the S3 bucket to store the source artifact zip file. Defaults to the destination bucket if not provided. | string | `""`                        | No       |
+| `artifact_src_bucket_path` | Path in the S3 bucket where the source artifact zip file is located.                                            | string | `"__upload__/artifact.zip"` | No       |
+| `artifact_src_local_path`  | Local path of the artifact zip file where Terraform is executed.                                                | string | N/A                         | Yes      |
+| `artifact_dst_bucket_arn`  | ARN of the destination S3 bucket to upload the contents of the zip file.                                        | string | N/A                         | Yes      |
+| `artifact_dst_bucket_path` | Path in the destination S3 bucket to upload the contents of the zip file.                                       | string | `"/"`                       | No       |
 
 ## Outputs
 
