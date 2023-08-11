@@ -34,7 +34,7 @@ module "example_label" {
   source  = "cloudposse/label/null"
   version = "0.25.0"
 
-  name        = "tf-example-complete-${random_string.example_random_suffix.result}"
+  name        = local.name
   environment = "use1" # us-east-1
   tags        = local.tags
 }
