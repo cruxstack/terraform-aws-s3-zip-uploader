@@ -20,7 +20,7 @@ data "aws_arn" "artifact_dst_bucket" {
 
 # ================================================================= artifact ===
 
-resource "aws_s3_bucket_object" "artifact" {
+resource "aws_s3_object" "artifact" {
   count = module.this.enabled ? 1 : 0
 
   bucket = local.artifact_src_bucket_name
@@ -43,7 +43,7 @@ data "aws_lambda_invocation" "artifact" {
 
   depends_on = [
     aws_lambda_function.this,
-    aws_s3_bucket_object.artifact,
+    aws_s3_object.artifact,
   ]
 }
 
