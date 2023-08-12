@@ -31,9 +31,9 @@ module "s3_zip_uploader" {
 
 ## Inputs
 
-This module uses the `cloudposse/label/null` module for naming and tagging
-resources. As such, it also includes a `context.tf` file with additional
-optional variables you can set. Refer to the [`cloudposse/label` documentation](https://registry.terraform.io/modules/cloudposse/label/null/latest)
+In addition to the variables documented below, this module includes several
+other optional variables (e.g., `name`, `tags`, etc.) provided by the
+`cloudposse/label/null` module. Please refer to its [documentation](https://registry.terraform.io/modules/cloudposse/label/null/latest)
 for more details on these variables.
 
 | Name                       | Description                                                                                                     | Type   | Default                     | Required |
