@@ -8,7 +8,11 @@ locals {
   artifact_dst_bucket_arn  = var.artifact_dst_bucket_arn
   artifact_dst_bucket_name = data.aws_arn.artifact_dst_bucket.resource
   artifact_dst_bucket_path = trimprefix(var.artifact_dst_bucket_path, "/")
+
+  aws_partition = data.aws_partition.current.partition
 }
+
+data "aws_partition" "current" {}
 
 data "aws_arn" "artifact_src_bucket" {
   arn = local.artifact_src_bucket_arn
@@ -112,7 +116,7 @@ resource "aws_iam_role" "this" {
   })
 
   managed_policy_arns = [
-    "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+    "arn:${local.aws_partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
   ]
 
   inline_policy {
