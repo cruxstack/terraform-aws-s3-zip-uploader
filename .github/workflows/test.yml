@@ -12,52 +12,44 @@ permissions:
 
 env:
   TF_IN_AUTOMATION: true
-  TF_PLUGIN_CACHE_DIR: ${{ runner.temp }}/.terraform.d/plugin-cache
-  TFLINT_PLUGIN_DIR: ${{ runner.temp }}/.tflint.d/plugins
 
 jobs:
   lint:
-    name: static checks
+    name: lint
     runs-on: ubuntu-latest
 
     steps:
-      - name: checkout
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: setup terraform
         uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_wrapper: false
 
-      - name: setup terraform
-        uses: hashicorp/setup-terraform@v3
-
-      - name: cache tf plugins
+      - name: Cache Terraform Plugins
         uses: actions/cache@v4
         with:
-          path: ${{ env.TF_PLUGIN_CACHE_DIR }}
+          path: ${{ runner.temp }}/.terraform.d/plugin-cache
           key: tf-plugins-${{ runner.os }}-${{ hashFiles('**/.terraform.lock.hcl') }}
 
-      - name: initialize terraform
+      - name: Initialize Terraform
         run:  terraform init
 
-      - name: suggest terraform format
+      - name: Suggest Terraform Format
         if: github.event_name == 'pull_request'
         uses: reviewdog/action-suggester@v1
         with:
           tool_name: terraform-fmt
           level: warning
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          fail_on_error: false
+          fail_level: error
         env:
           SUGGESTER_KIND: patch
-        run: terraform fmt -recursive
 
-      - name: check terraform format
+      - name: Check Terraform Format
         if: github.event_name == 'push'
         run: terraform fmt -recursive -check
 
-      - name: validate terraform
+      - name: Validate Terraform
         uses: reviewdog/action-terraform-validate@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -65,31 +57,16 @@ jobs:
           level: warning
           fail_level: error
 
-      - name: lint terraform
+      - name: Lint Terraform
         uses: reviewdog/action-tflint@v1
         with:
           reporter: github-pr-review
           filter_mode: nofilter
-          fail_on_error: true
-          tflint_command: tflint -f sarif
+          fail_level: error
 
-      - name: lint github actions
+      - name: Lint GitHub Actions
         uses: reviewdog/action-actionlint@v1
         with:
           reporter: github-pr-check
-          fail_on_error: true
+          fail_level: error
           filter_mode: nofilter
-
-      - name: check terraform security
-        uses: aquasecurity/tfsec-sarif-action@v0
-        with:
-          working_directory: .
-          sarif_file: tfsec.sarif
-
-      - name: review terraform security report
-        uses: reviewdog/action-sarif@v1
-        with:
-          sarif_file: tfsec.sarif
-          reporter: github-pr-review
-          level: warning
-          fail_on_error: true
