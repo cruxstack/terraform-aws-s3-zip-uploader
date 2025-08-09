@@ -10,9 +10,19 @@ locals {
   artifact_dst_bucket_path = trimprefix(var.artifact_dst_bucket_path, "/")
 
   aws_partition = data.aws_partition.current.partition
+
+  iam_role_policies = {
+    access = one(data.aws_iam_policy_document.this.*.json)
+  }
+
+  iam_role_attachments = toset(module.this.enabled ? [
+    "arn:${local.aws_partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+  ] : [])
 }
 
-data "aws_partition" "current" {}
+data "aws_partition" "current" {
+  count = module.this.enabled ? 1 : 0
+}
 
 data "aws_arn" "artifact_src_bucket" {
   arn = local.artifact_src_bucket_arn
@@ -115,16 +125,22 @@ resource "aws_iam_role" "this" {
     }]
   })
 
-  managed_policy_arns = [
-    "arn:${local.aws_partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-  ]
-
-  inline_policy {
-    name   = "access"
-    policy = data.aws_iam_policy_document.this[0].json
-  }
-
   tags = module.uploader_label.tags
+}
+
+resource "aws_iam_role_policy_attachment" "ssm_managed_instance_core" {
+  for_each = local.iam_role_attachments
+
+  role       = aws_iam_role.this[0].name
+  policy_arn = each.key
+}
+
+resource "aws_iam_role_policy" "this" {
+  for_each = { for k, v in local.iam_role_policies : k => v if v != null }
+
+  name   = each.key
+  role   = resource.aws_iam_role.this[0].name
+  policy = each.value
 }
 
 data "aws_iam_policy_document" "this" {
