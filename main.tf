@@ -9,7 +9,7 @@ locals {
   artifact_dst_bucket_name = data.aws_arn.artifact_dst_bucket.resource
   artifact_dst_bucket_path = trimprefix(var.artifact_dst_bucket_path, "/")
 
-  aws_partition = data.aws_partition.current.partition
+  aws_partition = one(data.aws_partition.current.*.partition)
 
   iam_role_policies = {
     access = one(data.aws_iam_policy_document.this.*.json)
