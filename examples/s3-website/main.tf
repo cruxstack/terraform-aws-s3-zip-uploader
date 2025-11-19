@@ -8,6 +8,7 @@ locals {
 module "s3_zip_uploader" {
   source = "../../"
 
+  enabled                 = true
   artifact_src_local_path = module.artifact_packager.artifact_package_path
   artifact_dst_bucket_arn = aws_s3_bucket.website_bucket.arn
 
@@ -20,6 +21,7 @@ module "artifact_packager" {
   source  = "cruxstack/artifact-packager/docker"
   version = "1.3.6"
 
+  enabled                = true
   docker_build_context   = "${path.module}/fixtures/website"
   docker_build_target    = "package"
   artifact_src_path      = "/tmp/package.zip"
