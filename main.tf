@@ -15,9 +15,9 @@ locals {
     access = one(data.aws_iam_policy_document.this.*.json)
   }
 
-  iam_role_attachments = toset(module.this.enabled ? [
-    "arn:${local.aws_partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-  ] : [])
+  iam_role_attachments = [
+    "policy/service-role/AWSLambdaBasicExecutionRole"
+  ]
 }
 
 data "aws_partition" "current" {
@@ -87,7 +87,7 @@ resource "aws_lambda_function" "this" {
   filename         = data.archive_file.uploader[0].output_path
   source_code_hash = data.archive_file.uploader[0].output_base64sha256
   handler          = "uploader.lambda_handler"
-  runtime          = "python3.8"
+  runtime          = "python3.14"
   timeout          = 90
   role             = aws_iam_role.this[0].arn
   layers           = []
@@ -129,14 +129,14 @@ resource "aws_iam_role" "this" {
 }
 
 resource "aws_iam_role_policy_attachment" "ssm_managed_instance_core" {
-  for_each = local.iam_role_attachments
+  for_each = toset(local.iam_role_attachments)
 
   role       = aws_iam_role.this[0].name
-  policy_arn = each.key
+  policy_arn = "arn:${local.aws_partition}:iam::aws:${each.key}"
 }
 
 resource "aws_iam_role_policy" "this" {
-  for_each = { for k, v in local.iam_role_policies : k => v if v != null }
+  for_each = local.iam_role_policies
 
   name   = each.key
   role   = resource.aws_iam_role.this[0].name
